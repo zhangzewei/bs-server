@@ -35,8 +35,8 @@ export default [
     },
   },
   {
-    path: '/user/delete',
-    method: 'POST',
+    path: '/user',
+    method: 'DELETE',
     config: {
       handler: controller.deleteUser,
       tags: ['api'],

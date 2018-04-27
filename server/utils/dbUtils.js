@@ -1,16 +1,18 @@
 import ES from 'elasticsearch';
 import cuid from 'cuid';
 
-let DB = null;
+let DBClient = null;
 export const getDB = () => {
-  if (!DB) {
-    DB = new ES.Client({
+  if (!DBClient) {
+    DBClient = new ES.Client({
       host: 'localhost:9200',
       log: 'error'
     });
   }
-  return DB;
+  return DBClient;
 }
+
+const DB = getDB();
 
 export const insetOneToBD = async ({
   index,

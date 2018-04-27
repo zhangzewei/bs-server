@@ -1,4 +1,4 @@
-import getDB from '../utils/connectDB';
+import { getDB } from '../utils/dbUtils';
 
 const DB = getDB();
 
