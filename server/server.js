@@ -3,7 +3,7 @@
 import Hapi from 'hapi';
 
 const app = Hapi.server({
-    port: 3000,
+    port: 4000,
     host: 'localhost',
 });
 

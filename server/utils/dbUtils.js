@@ -1,5 +1,6 @@
 import ES from 'elasticsearch';
 import cuid from 'cuid';
+import _get from 'lodash/get';
 
 let DBClient = null;
 export const getDB = () => {
@@ -13,6 +14,23 @@ export const getDB = () => {
 }
 
 const DB = getDB();
+
+const genFilter = filters => Object.keys(filters)
+  .map(filter => ({
+    term: { [filter]: filters[filter] }
+  }));
+
+const deleteBulks = (delIds, index) => delIds.map(delId => ({
+  delete: { _index: index, _type: 'data', _id: delId }
+}));
+
+const resolveMultiResults = resultObj => {
+  const hits = _get(resultObj, ['hits', 'hits']);
+  return hits.map(hit => ({
+    id: _get(hit, ['_id']),
+    ..._get(hit, ['_source'])
+  }));
+}
 
 export const insetOneToBD = async ({
   index,
@@ -109,5 +127,49 @@ export const updateOneInDB = async ({
       res: 'error',
       msg: err
     };
+  }
+}
+
+export const deleteByIds = async (ids, index) => {
+  try {
+    const bulkBody = deleteBulks(ids, index);
+    const resp = await DB.bulk({
+      body: bulkBody
+    });
+    return {
+      res: 'success',
+      msg: resp
+    }
+  } catch (err) {
+    return {
+      res: 'error',
+      msg: err
+    }
+  }
+}
+
+export const getAllSubjects = async (filter, index) => {
+  try {
+    const resp = await DB.search({
+      index,
+      type: 'data',
+      size: 999,
+      body: {
+        query: {
+          bool: {
+            filter: filter ? genFilter(filter) : []
+          }
+        }
+      }
+    });
+    return {
+      res: 'success',
+      msg: resolveMultiResults(resp)
+    }
+  } catch(err) {
+    return {
+      res: 'error',
+      msg: err
+    }
   }
 }

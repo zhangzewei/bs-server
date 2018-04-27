@@ -9,7 +9,14 @@ const DB = getDB();
 
 export const register = async request => {
   try {
-    const { acount, password } = request.payload;
+    const {
+      acount,
+      password,
+      type,
+      tel,
+      email,
+      gender
+    } = request.payload;
     const exists = await DB.exists({
       index: 'user',
       type: 'data',
@@ -25,7 +32,12 @@ export const register = async request => {
       id: acount,
       body: {
         acount,
-        password
+        password,
+        type,
+        tel: tel || '',
+        gender: gender || '',
+        email: email || '',
+        orders: [1,2,3]
       }
     });
     return {
