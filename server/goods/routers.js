@@ -45,8 +45,7 @@ export default [
       tags: ['api'],
       validate: {
         params: {
-          goodId : Joi.string()
-                  .required(),
+          goodId : Joi.string().required(),
         }
       }
     },
