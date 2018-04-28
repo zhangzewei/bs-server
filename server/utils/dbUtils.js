@@ -56,7 +56,7 @@ export const insetOneToBD = async ({
   }
 }
 
-export const getOneToBD = async ({
+export const getOneFromBD = async ({
   index,
   id
 }) => {
@@ -165,6 +165,27 @@ export const getAllSubjects = async (filter, index) => {
     return {
       res: 'success',
       msg: resolveMultiResults(resp)
+    }
+  } catch(err) {
+    return {
+      res: 'error',
+      msg: err
+    }
+  }
+}
+
+export const addOneToDBWithoutId = async (doc, index) => {
+  try {
+    const resp = await DB.index({
+      index,
+      type: 'data',
+      body: {
+        ...doc
+      }
+    });
+    return {
+      res: 'success',
+      msg: resp,
     }
   } catch(err) {
     return {

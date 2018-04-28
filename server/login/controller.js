@@ -20,7 +20,7 @@ export const register = async request => {
     const exists = await DB.exists({
       index: 'user',
       type: 'data',
-      id: acount,
+      id: acount
     });
     if (exists) return {
       res: 'existed',
@@ -37,7 +37,8 @@ export const register = async request => {
         tel: tel || '',
         gender: gender || '',
         email: email || '',
-        orders: [1,2,3]
+        orders: [], // 订单数，存入Ids
+        goods: [] // 拥有商品数，类型为seller才会对这个字段进行修改
       }
     });
     return {

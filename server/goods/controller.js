@@ -1,46 +1,18 @@
 import {
   getDB,
-  getOneToBD,
+  getOneFromBD,
   updateOneInDB,
   deleteByIds,
-  getAllSubjects
+  getAllSubjects,
+  addOneToDBWithoutId
 } from '../utils/dbUtils';
 import _get from 'lodash/get';
 
 const DB = getDB();
 
-export const addGood = async request => {
-  try {
-    const {
-      name,
-      tag,
-      imgUrl,
-      price,
-      desc,
-    } = request.payload;
-    const resp = await DB.index({
-      index: 'goods',
-      type: 'data',
-      body: {
-        name,
-        tag,
-        imgUrl,
-        price,
-        desc,
-        sellNum: 0,
-      }
-    });
-    return {
-      res: 'success',
-      msg: resp,
-    }
-  } catch(err) {
-    return {
-      res: 'error',
-      msg: err
-    }
-  }
-}
+export const addGood = request => 
+  addOneToDBWithoutId(request.payload, 'goods');
+
 
 export const getAllGoods = request => {
   const { filter } = request.payload;
@@ -49,7 +21,7 @@ export const getAllGoods = request => {
 
 export const getGoodDetails = request => {
   const { goodId } = request.params;
-  return getOneToBD({
+  return getOneFromBD({
     index: 'goods',
     id: goodId
   });
