@@ -14,6 +14,7 @@ export default [
           ownerId: Joi.string().required(), // 谁的订单
           createDate: Joi.any().required(),
           goods: Joi.array().required(), // 订单包含的商品Ids
+          addrs: Joi.string().required(),
           status: Joi.string().required().valid(['created', 'finished', 'canceled']),
         }
       }
